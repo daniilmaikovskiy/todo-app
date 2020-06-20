@@ -124,6 +124,7 @@ body {
 }
 
 /* end */
+/* toggle-all */
 
 .toggle-all {
 	width: 1px;
@@ -156,6 +157,9 @@ body {
 .toggle-all:checked + label:before {
 	color: #737373;
 }
+
+/* end */
+/* todo-list */
 
 .todo-list {
 	margin: 0;
@@ -289,6 +293,8 @@ body {
 .todo-list li.editing:last-child {
 	margin-bottom: -1px;
 }
+
+/* end */
 
 .footer {
 	display: flex;
