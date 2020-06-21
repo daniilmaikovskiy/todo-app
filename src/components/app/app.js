@@ -1,6 +1,6 @@
 import React from 'react';
 import './app.css';
-import Header from '../header';
+import NewTaskForm from '../new-task-form';
 import Main from '../main';
 
 export default function App() {
@@ -27,7 +27,7 @@ export default function App() {
 
     return (
       <section className='todoapp'>
-        <Header />
+        <NewTaskForm />
         <Main tasks={ tasks } />
       </section>
     );

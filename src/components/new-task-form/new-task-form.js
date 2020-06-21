@@ -1,7 +1,7 @@
 import React from 'react';
-import './header.css';
+import './new-task-form.css';
 
-export default function Header() {
+export default function NewTaskForm() {
     return (
         <header className="header">
             <h1>todos</h1>
