@@ -5,7 +5,10 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 export default class Task extends Component {
   constructor(props) {
     super(props);
-    this.state = {...props};
+    
+    let { onDeleted, ...state } = props;
+
+    this.state = { ...state };
   }
 
   set isActive(value) {
@@ -19,28 +22,29 @@ export default class Task extends Component {
     return this.state.className === 'active';
   }
 
-  onClick = () => {
-    this.isActive = !this.isActive;
-  }
+  labelOnClick = () => this.isActive = !this.isActive;
 
   render() {
-    let { className, description, created } = this.state;
+    const { className, description, created } = this.state;
+    const { onDeleted } = this.props;
 
-    let editInput = className === 'editing' 
-      ? <input type="text" className="edit" defaultValue={ description } /> : null;
+    const editInput = (
+      className === 'editing' 
+      ? <input type="text" className="edit" defaultValue={ description } /> 
+      : null);
     
     return (
       <li className={ className }>
         <div className="view">
           <input className="toggle" type="checkbox" />
-          <label onClick={ this.onClick }>
+          <label onClick={ this.labelOnClick }>
             <span className="description">{ description }</span>
             <span className="created">
               { formatDistanceToNow(created, { addSuffix: true }) }
             </span>
           </label>
           <button className="icon icon-edit"></button>
-          <button className="icon icon-destroy"></button>
+          <button className="icon icon-destroy" onClick={ onDeleted }></button>
         </div>
         { editInput }
       </li>

@@ -27,11 +27,22 @@ export default class App extends Component {
     ]
   };
 
+  onDeleted = id => {
+    this.setState(state => {
+      let index = state.tasks.findIndex(el => id === el.id);
+
+      let before = state.tasks.slice(0, index);
+      let after  = state.tasks.slice(index + 1);
+
+      return { tasks: [ ...before, ...after ] };
+    });
+  }
+
   render() {
     return (
       <section className='todoapp'>
         <NewTaskForm />
-        <Main tasks={ this.state.tasks } />
+        <Main tasks={ this.state.tasks } onDeleted={ this.onDeleted } />
       </section>
     );
   }
