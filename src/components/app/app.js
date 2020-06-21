@@ -20,7 +20,7 @@ export default class App extends Component {
       },
       {
         id: 3,
-        className: 'none',
+        className: 'active',
         description: 'Active task',
         created: new Date('June 21, 2020 11:17:21'),
       },
