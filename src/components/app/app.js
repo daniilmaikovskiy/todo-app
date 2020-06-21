@@ -9,19 +9,19 @@ export default function App() {
         id: 1,
         className: 'completed',
         description: 'Completed task',
-        created: 'created 17 seconds ago',
+        created: new Date('June 21, 2020 10:24:18'),
       },
       {
         id: 2,
         className: 'editing',
         description: 'Editing task',
-        created: 'created 5 minutes ago',
+        created: new Date('June 21, 2020 10:48:43'),
       },
       {
         id: 3,
         className: 'none',
         description: 'Active task',
-        created: 'created 5 minutes ago',
+        created: new Date('June 21, 2020 11:17:21'),
       },
     ];
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import './task.css';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 export default function Task({ className, description, created }) {
 
@@ -14,7 +15,9 @@ export default function Task({ className, description, created }) {
               <input className="toggle" type="checkbox" />
               <label>
                 <span className="description">{ description }</span>
-                <span className="created">{ created }</span>
+                <span className="created">
+                  { formatDistanceToNow(created, { addSuffix: true }) }
+                </span>
               </label>
               <button className="icon icon-edit"></button>
               <button className="icon icon-destroy"></button>
