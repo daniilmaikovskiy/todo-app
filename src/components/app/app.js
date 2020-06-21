@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './app.css';
 import NewTaskForm from '../new-task-form';
 import Main from '../main';
 
-export default function App() {
-    const tasks = [
+export default class App extends Component {
+  state = {
+    tasks: [
       {
         id: 1,
         className: 'completed',
@@ -23,12 +24,15 @@ export default function App() {
         description: 'Active task',
         created: new Date('June 21, 2020 11:17:21'),
       },
-    ];
+    ]
+  };
 
+  render() {
     return (
       <section className='todoapp'>
         <NewTaskForm />
-        <Main tasks={ tasks } />
+        <Main tasks={this.state.tasks} />
       </section>
     );
-  };
+  }
+};
