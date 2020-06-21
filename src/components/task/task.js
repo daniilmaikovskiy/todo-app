@@ -4,11 +4,9 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 export default function Task({ className, description, created }) {
 
-    let editInput = null;
+    let editInput = className === 'editing' 
+      ? <input type="text" className="edit" defaultValue={ description } /> : null;
     
-    if (className === 'editing')
-        editInput = <input type="text" className="edit" defaultValue={ description } />
-
     return (
         <li className={ className }>
             <div className="view">
