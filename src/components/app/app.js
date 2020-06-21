@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './app.css';
 import NewTaskForm from '../new-task-form';
 import Main from '../main';
@@ -31,7 +31,7 @@ export default class App extends Component {
     return (
       <section className='todoapp'>
         <NewTaskForm />
-        <Main tasks={this.state.tasks} />
+        <Main tasks={ this.state.tasks } />
       </section>
     );
   }
