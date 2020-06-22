@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './app.css';
 import NewTaskForm from '../new-task-form';
-import Main from '../main';
+import TodoList from '../todo-list';
+import Footer from '../footer';
 
 export default class App extends Component {
   state = {
@@ -42,7 +43,10 @@ export default class App extends Component {
     return (
       <section className='todoapp'>
         <NewTaskForm />
-        <Main tasks={ this.state.tasks } onDeleted={ this.onDeleted } />
+        <section className='main'>
+            <TodoList tasks={ this.state.tasks } onDeleted={ this.onDeleted } />
+            <Footer />
+        </section>
       </section>
     );
   }

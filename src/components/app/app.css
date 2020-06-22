@@ -83,3 +83,9 @@ body {
 	-moz-text-rendering: optimizeLegibility;
 	text-rendering: optimizeLegibility;
 }
+
+.main {
+	position: relative;
+	z-index: 2;
+	border-top: 1px solid #e6e6e6;
+}
