@@ -5,6 +5,8 @@ import TodoList from '../todo-list';
 import Footer from '../footer';
 
 export default class App extends Component {
+  maxId = 10;
+  
   state = {
     tasks: [
       {
@@ -25,7 +27,9 @@ export default class App extends Component {
         description: 'Active task',
         created: new Date('June 21, 2020 11:17:21'),
       },
-    ]
+    ],
+
+    newTaskInput: '',
   };
 
   onDeleted = id => {
@@ -39,10 +43,31 @@ export default class App extends Component {
     });
   }
 
+  createNewTask(text) {
+    return {
+      id: this.maxId++,
+      className: 'active',
+      description: text,
+      created: new Date(),
+    }
+  }
+
+  addNewTask = text => {
+    this.setState(state => ({ 
+      tasks: [...state.tasks, this.createNewTask(text)],
+      newTaskInput: '',
+    }));
+  }
+
+  onNewTaskInputChanged = value => {
+    this.setState({ newTaskInput: value });
+  };
+
   render() {
     return (
       <section className='todoapp'>
-        <NewTaskForm />
+        <NewTaskForm addNewTask={ this.addNewTask } 
+          onChange={ this.onNewTaskInputChanged }  value={ this.state.newTaskInput } />
         <section className='main'>
             <TodoList tasks={ this.state.tasks } onDeleted={ this.onDeleted } />
             <Footer />
