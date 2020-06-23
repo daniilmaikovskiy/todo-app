@@ -6,9 +6,9 @@ export default class Task extends Component {
   constructor(props) {
     super(props);
     
-    let { onDeleted, ...state } = props;
+    let { className, description, created } = props;
 
-    this.state = { ...state };
+    this.state = { className, description, created };
   }
 
   set isActive(value) {
@@ -24,14 +24,31 @@ export default class Task extends Component {
 
   labelOnClick = () => this.isActive = !this.isActive;
 
-  render() {
-    const { className, description, created } = this.state;
-    const { onDeleted } = this.props;
+  editingFormOnSubmit = e => {
+    e.preventDefault();
 
-    const editInput = (
-      className === 'editing' 
-      ? <input type="text" className="edit" defaultValue={ description } /> 
-      : null);
+    let value = e.target.input.value;
+    this.props.onEdited(value);
+
+    this.setState({
+      className: 'active',
+      description: value,
+    });
+  }
+
+  render() {
+    let { className, description, created } = this.state;
+    let { onDeleted } = this.props;
+
+    let editInput = null;
+
+    if (className === 'editing') {
+      editInput = (
+        <form onSubmit={ this.editingFormOnSubmit }>
+          <input type="text" className="edit" defaultValue={ description } name='input' />
+        </form>
+      );
+    }
     
     return (
       <li className={ className }>

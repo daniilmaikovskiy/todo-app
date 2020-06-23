@@ -63,13 +63,31 @@ export default class App extends Component {
     this.setState({ newTaskInput: value });
   };
 
+  onEdited = (id, text) => {
+    this.setState(state => {
+      const { tasks } = state;
+
+      let idx = tasks.findIndex(el => el.id === id);
+      let newTask = { ...tasks[idx], description: text, className: 'active', };
+
+      return {
+        tasks: [
+          ...tasks.slice(0, idx),
+          newTask,
+          ...tasks.slice(idx + 1),
+        ],
+      }
+    });
+  }
+
   render() {
     return (
       <section className='todoapp'>
         <NewTaskForm addNewTask={ this.addNewTask } 
           onChange={ this.onNewTaskInputChanged }  value={ this.state.newTaskInput } />
         <section className='main'>
-            <TodoList tasks={ this.state.tasks } onDeleted={ this.onDeleted } />
+            <TodoList tasks={ this.state.tasks } 
+              onDeleted={ this.onDeleted } onEdited={ this.onEdited } />
             <Footer />
         </section>
       </section>
