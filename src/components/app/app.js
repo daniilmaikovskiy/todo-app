@@ -30,6 +30,7 @@ export default class App extends Component {
     ],
 
     newTaskInput: '',
+    filter: 'all',
   };
 
   onDeleted = id => {
@@ -114,10 +115,12 @@ export default class App extends Component {
     });
   }
 
+  setFilter = value => this.setState(() => ({ filter: value, }));
+
   render() {
-    let { tasks, newTaskInput } = this.state;
-    let { addNewTask, onNewTaskInputChanged, 
-      onDeleted, onEdited, onClickEditButton, onCompleted } = this;
+    let { tasks, newTaskInput, filter } = this.state;
+    let { addNewTask, onNewTaskInputChanged, onDeleted, onEdited, onClickEditButton, 
+      onCompleted, setFilter } = this;
 
     return (
       <section className='todoapp'>
@@ -129,7 +132,7 @@ export default class App extends Component {
               onEdited={ onEdited }
               onCompleted={ onCompleted } 
               onClickEditButton={ onClickEditButton } />
-            <Footer />
+            <Footer setFilter={ setFilter } filter={ filter }/>
         </section>
       </section>
     );
