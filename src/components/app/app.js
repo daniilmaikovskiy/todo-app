@@ -80,14 +80,55 @@ export default class App extends Component {
     });
   }
 
+  onCompleted = id => {
+    this.setState(state => {
+      const { tasks } = state;
+
+      let idx = tasks.findIndex(el => el.id === id);
+      let newTask = { ...tasks[idx], className: 'completed', };
+
+      return {
+        tasks: [
+          ...tasks.slice(0, idx),
+          newTask,
+          ...tasks.slice(idx + 1),
+        ],
+      }
+    });
+  }
+
+  onClickEditButton = id => {
+    this.setState(state => {
+      const { tasks } = state;
+
+      let idx = tasks.findIndex(el => el.id === id);
+      let newTask = { ...tasks[idx], className: 'editing', };
+
+      return {
+        tasks: [
+          ...tasks.slice(0, idx),
+          newTask,
+          ...tasks.slice(idx + 1),
+        ],
+      }
+    });
+  }
+
   render() {
+    let { tasks, newTaskInput } = this.state;
+    let { addNewTask, onNewTaskInputChanged, 
+      onDeleted, onEdited, onClickEditButton, onCompleted } = this;
+
     return (
       <section className='todoapp'>
-        <NewTaskForm addNewTask={ this.addNewTask } 
-          onChange={ this.onNewTaskInputChanged }  value={ this.state.newTaskInput } />
+        <NewTaskForm addNewTask={ addNewTask } 
+          onChange={ onNewTaskInputChanged }  value={ newTaskInput } />
         <section className='main'>
-            <TodoList tasks={ this.state.tasks } 
-              onDeleted={ this.onDeleted } onEdited={ this.onEdited } />
+            <TodoList tasks={ tasks } 
+              onDeleted={ onDeleted } 
+              onEdited={ onEdited }
+              onCompleted={ onCompleted } 
+              onClickEditButton={ onClickEditButton } />
             <Footer />
         </section>
       </section>

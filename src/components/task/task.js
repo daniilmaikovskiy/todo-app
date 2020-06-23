@@ -22,7 +22,10 @@ export default class Task extends Component {
     return this.state.className === 'active';
   }
 
-  labelOnClick = () => this.isActive = !this.isActive;
+  labelOnClick = () => {
+    this.props.onCompleted();
+    this.isActive = !this.isActive;
+  };
 
   editingFormOnSubmit = e => {
     e.preventDefault();
@@ -36,9 +39,15 @@ export default class Task extends Component {
     });
   }
 
+  onClickEditButton = () => {
+    this.props.onClickEditButton();
+    this.setState({ className: 'editing', });
+  }
+
   render() {
     let { className, description, created } = this.state;
     let { onDeleted } = this.props;
+    let { labelOnClick, onClickEditButton } = this;
 
     let editInput = null;
 
@@ -54,13 +63,13 @@ export default class Task extends Component {
       <li className={ className }>
         <div className="view">
           <input className="toggle" type="checkbox" />
-          <label onClick={ this.labelOnClick }>
+          <label onClick={ labelOnClick }>
             <span className="description">{ description }</span>
             <span className="created">
               { formatDistanceToNow(created, { addSuffix: true }) }
             </span>
           </label>
-          <button className="icon icon-edit"></button>
+          <button className="icon icon-edit" onClick={ onClickEditButton }></button>
           <button className="icon icon-destroy" onClick={ onDeleted }></button>
         </div>
         { editInput }
