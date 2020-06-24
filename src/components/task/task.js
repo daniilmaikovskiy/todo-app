@@ -22,8 +22,7 @@ export default function Task(
     );
   }
 
-  let isHidden = !(filter === 'all') && (
-                  (filter === 'completed' && !isCompleted) ||
+  let isHidden = ((filter === 'completed' && !isCompleted) ||
                   (filter === 'active' && isCompleted));
     
   return (
