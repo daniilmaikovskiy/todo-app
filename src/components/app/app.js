@@ -26,7 +26,6 @@ export default class App extends Component {
 
   onEdited = (id, text) => {
     this.setState(({ tasks }) => {
-
       let idx = tasks.findIndex(el => el.id === id);
       let className = tasks[idx].className.indexOf('completed') + 1 ? 'completed' : 'active';
       let newText = text.trim();
