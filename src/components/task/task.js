@@ -22,9 +22,9 @@ export default function Task(
     );
   }
 
-  let isHidden = !(filter === 'all') && 
-                ((filter === 'completed' && !isCompleted) ||
-                 (filter === 'active' && isCompleted));
+  let isHidden = !(filter === 'all') && (
+                  (filter === 'completed' && !isCompleted) ||
+                  (filter === 'active' && isCompleted));
     
   return (
     <li className={ className + (isHidden ? ' hidden' : '') }>
