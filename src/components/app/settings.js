@@ -7,7 +7,7 @@ export const DEFAULT_TASKS = [
     },
     {
       id: 2,
-      className: 'editing',
+      className: 'active-before-edit editing',
       description: 'Editing task',
       created: new Date('June 21, 2020 10:48:43'),
     },

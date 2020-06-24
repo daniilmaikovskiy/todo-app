@@ -149,6 +149,11 @@
 	}
 }
 
+.edit-completed {
+	color: #cdcdcd;
+	text-decoration: line-through;
+}
+
 .hidden {
 	display: none;
 }

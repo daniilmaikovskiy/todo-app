@@ -7,10 +7,15 @@ export default function Task(
 
   let editInput = null;
 
-  if (className === 'editing') {
+  if (className.indexOf('editing') + 1) {
+    let secondClass = 'edit-' + (className.indexOf('completed') + 1 ? 'completed' : 'active');
+    let editClassName = 'edit ' + secondClass;
+
     editInput = (
       <form onSubmit={ e => { e.preventDefault(); onEdited(e.target.input.value) } }>
-        <input type="text" className="edit" defaultValue={ description } name='input' />
+        <input type="text" className={ editClassName } 
+          onChange={ e => e.target.value = e.target.value.trimLeft() }
+          defaultValue={ description } name='input' />
       </form>
     );
   }

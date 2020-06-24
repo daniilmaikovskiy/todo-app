@@ -21,12 +21,14 @@ export default class App extends Component {
   onEdited = (id, text) => {
     this.setState(state => {
       let idx = getIndex(state.tasks, id);
+      let className 
+        = state.tasks[idx].className.indexOf('completed') + 1 ? 'completed' : 'active';
       let newText = text.trim();
 
       newText = newText.length ? newText : state.tasks[idx].description;
 
       return updateTasks(state.tasks, idx, 
-        { ...state.tasks[idx], description: newText, className: 'active', });
+        { ...state.tasks[idx], description: newText, className, });
     });
   }
 
@@ -42,8 +44,9 @@ export default class App extends Component {
   onClickEditButton = id => {
     this.setState(state => {
       let idx = getIndex(state.tasks, id);
+      let className = state.tasks[idx].className + '-before-edit editing';
 
-      return updateTasks(state.tasks, idx, { ...state.tasks[idx], className: 'editing', });
+      return updateTasks(state.tasks, idx, { ...state.tasks[idx], className, });
     });
   }
 
