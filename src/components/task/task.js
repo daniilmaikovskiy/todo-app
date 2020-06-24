@@ -3,12 +3,14 @@ import './task.css';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 export default function Task(
-  { onDeleted, onCompleted, onEdited, onClickEditButton, className, description, created }) {
-
+  { onDeleted, onCompleted, onEdited, onClickEditButton, 
+    className, description, created, filter }) {
+  
+  let isCompleted = className.indexOf('completed') + 1;
   let editInput = null;
 
   if (className.indexOf('editing') + 1) {
-    let secondClass = 'edit-' + (className.indexOf('completed') + 1 ? 'completed' : 'active');
+    let secondClass = 'edit-' + (isCompleted ? 'completed' : 'active');
     let editClassName = 'edit ' + secondClass;
 
     editInput = (
@@ -19,9 +21,15 @@ export default function Task(
       </form>
     );
   }
+
+  let hiddenClass = '';
+
+  if (filter === 'completed' && isCompleted) hiddenClass = 'hidden';
+
+  if (filter === 'active' && !isCompleted) hiddenClass = 'hidden';
     
   return (
-    <li className={ className }>
+    <li className={ className + ' ' + hiddenClass }>
       <div className="view">
         <input className="toggle" type="checkbox" />
         <label onClick={ onCompleted }>

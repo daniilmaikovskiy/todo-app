@@ -84,7 +84,7 @@ export default class App extends Component {
         <NewTaskForm addNewTask={ addNewTask } 
           onChange={ onNewTaskInputChanged }  value={ newTaskInput } />
         <section className='main'>
-            <TodoList tasks={ tasks } 
+            <TodoList tasks={ tasks } filter={ filter }
               onDeleted={ onDeleted } 
               onEdited={ onEdited }
               onCompleted={ onCompleted } 
