@@ -1,25 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './todo-list.css';
 import Task from '../task';
 
-export default class TodoList extends Component {
-    render() {
-        let { tasks, onDeleted, onEdited, onCompleted, onClickEditButton } = this.props;
+export default function TodoList(
+    { tasks, onDeleted, onEdited, onCompleted, onClickEditButton }) {
 
-        const taskArr = tasks.map(taskData => {
-            let { id, ...taskProps } = taskData;
+    const taskArr = tasks.map(taskData => {
+        let { id, ...taskProps } = taskData;
     
-            return <Task key={ id } { ...taskProps } 
-                onDeleted={ () => onDeleted(id) } 
-                onEdited={ text => onEdited(id, text) } 
-                onCompleted={ () => { onCompleted(id) } }
-                onClickEditButton={ () => { onClickEditButton(id) } } />
-        });
+        return <Task key={ id } { ...taskProps } 
+            onDeleted={ () => onDeleted(id) } 
+            onEdited={ text => onEdited(id, text) } 
+            onCompleted={ () => { onCompleted(id) } }
+            onClickEditButton={ () => { onClickEditButton(id) } } />
+    });
     
-        return (
-            <ul className="todo-list">
-                { taskArr }
-            </ul>
-        );
-    }
+    return (
+        <ul className="todo-list">
+            { taskArr }
+        </ul>
+    );
 }
