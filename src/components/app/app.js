@@ -86,7 +86,10 @@ export default class App extends Component {
       const { tasks } = state;
 
       let idx = tasks.findIndex(el => el.id === id);
-      let newTask = { ...tasks[idx], className: 'completed', };
+      let oldTask = tasks[idx];
+      let newClass = oldTask.className === 'completed' ? 'active' : 'completed';
+
+      let newTask = { ...tasks[idx], className: newClass, };
 
       return {
         tasks: [
