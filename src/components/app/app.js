@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './app.css';
+import { getIndex, updateTasks } from './app-helper';
 import NewTaskForm from '../new-task-form';
 import TodoList from '../todo-list';
 import Footer from '../footer';
@@ -33,46 +34,32 @@ export default class App extends Component {
     filter: 'all',
   };
 
-  getIndex = (arr, id) => arr.findIndex(el => el.id === id);
-
-  updateTasks = (tasks, idx, newTaskProps) => {
-    let before = tasks.slice(0, idx);
-    let after  = tasks.slice(idx + 1);
-
-    if (newTaskProps === null) return { tasks: [ ...before, ...after ] };
-
-    let newTask = { ...newTaskProps };
-
-    return { tasks: [ ...before, newTask, ...after ], };
-  }
-
   onDeleted = id => this.setState(state => 
-    this.updateTasks(state.tasks, this.getIndex(state.tasks, id), null));
+    updateTasks(state.tasks, getIndex(state.tasks, id), null));
 
   onEdited = (id, text) => {
     this.setState(state => {
-      let idx = this.getIndex(state.tasks, id);
+      let idx = getIndex(state.tasks, id);
 
-      return this.updateTasks(state.tasks, idx, 
+      return updateTasks(state.tasks, idx, 
         { ...state.tasks[idx], description: text, className: 'active', });
     });
   }
 
   onCompleted = id => {
     this.setState(state => {
-      let idx = this.getIndex(state.tasks, id);
+      let idx = getIndex(state.tasks, id);
       let className = state.tasks[idx].className === 'completed' ? 'active' : 'completed';
 
-      return this.updateTasks(state.tasks, idx, { ...state.tasks[idx], className, });
+      return updateTasks(state.tasks, idx, { ...state.tasks[idx], className, });
     });
   }
 
   onClickEditButton = id => {
     this.setState(state => {
-      let idx = this.getIndex(state.tasks, id);
+      let idx = getIndex(state.tasks, id);
 
-      return this.updateTasks(state.tasks, idx, 
-        { ...state.tasks[idx], className: 'editing', });
+      return updateTasks(state.tasks, idx, { ...state.tasks[idx], className: 'editing', });
     });
   }
 
