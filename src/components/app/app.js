@@ -21,9 +21,12 @@ export default class App extends Component {
   onEdited = (id, text) => {
     this.setState(state => {
       let idx = getIndex(state.tasks, id);
+      let newText = text.trim();
+
+      newText = newText.length ? newText : state.tasks[idx].description;
 
       return updateTasks(state.tasks, idx, 
-        { ...state.tasks[idx], description: text, className: 'active', });
+        { ...state.tasks[idx], description: newText, className: 'active', });
     });
   }
 
