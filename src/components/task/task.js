@@ -22,14 +22,12 @@ export default function Task(
     );
   }
 
-  let hiddenClass = '';
-
-  if (filter === 'completed' && isCompleted) hiddenClass = 'hidden';
-
-  if (filter === 'active' && !isCompleted) hiddenClass = 'hidden';
+  let isHidden = !(filter === 'all') && 
+                ((filter === 'completed' && !isCompleted) ||
+                 (filter === 'active' && isCompleted));
     
   return (
-    <li className={ className + ' ' + hiddenClass }>
+    <li className={ className + (isHidden ? ' hidden' : '') }>
       <div className="view">
         <input className="toggle" type="checkbox" />
         <label onClick={ onCompleted }>
