@@ -1,35 +1,16 @@
 import React, { Component } from 'react';
 import './app.css';
 import { getIndex, updateTasks } from './app-helper';
+import { DEFAULT_TASKS, DEFAULT_MAX_ID } from './settings';
 import NewTaskForm from '../new-task-form';
 import TodoList from '../todo-list';
 import Footer from '../footer';
 
 export default class App extends Component {
-  maxId = 10;
+  maxId = DEFAULT_MAX_ID;
   
   state = {
-    tasks: [
-      {
-        id: 1,
-        className: 'completed',
-        description: 'Completed task',
-        created: new Date('June 21, 2020 10:24:18'),
-      },
-      {
-        id: 2,
-        className: 'editing',
-        description: 'Editing task',
-        created: new Date('June 21, 2020 10:48:43'),
-      },
-      {
-        id: 3,
-        className: 'active',
-        description: 'Active task',
-        created: new Date('June 21, 2020 11:17:21'),
-      },
-    ],
-
+    tasks: DEFAULT_TASKS,
     newTaskInput: '',
     filter: 'all',
   };
