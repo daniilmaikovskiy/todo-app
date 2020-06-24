@@ -54,8 +54,12 @@ export default class App extends Component {
   }
 
   addNewTask = text => {
+    let newTaskText = text.trim();
+
+    if (!newTaskText.length) return;
+
     this.setState(state => ({ 
-      tasks: [...state.tasks, this.createNewTask(text)],
+      tasks: [...state.tasks, this.createNewTask(newTaskText)],
       newTaskInput: '',
     }));
   }
