@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './app.css';
-import { getIndex, updateTasks } from './app-helper';
+import { updateTasks } from './app-helper';
 import { DEFAULT_TASKS, DEFAULT_MAX_ID } from './settings';
 import NewTaskForm from '../new-task-form';
 import TodoList from '../todo-list';
@@ -15,38 +15,43 @@ export default class App extends Component {
     filter: 'all',
   };
 
-  onDeleted = id => this.setState(state => 
-    updateTasks(state.tasks, getIndex(state.tasks, id), null));
+  onDeleted = id => this.setState(({ tasks }) => 
+    updateTasks(tasks, tasks.findIndex(el => el.id === id), null));
+
+  // clearCompleted = () => {
+  //   this.setState(state => {
+
+  //   });
+  // }
 
   onEdited = (id, text) => {
-    this.setState(state => {
-      let idx = getIndex(state.tasks, id);
-      let className 
-        = state.tasks[idx].className.indexOf('completed') + 1 ? 'completed' : 'active';
+    this.setState(({ tasks }) => {
+
+      let idx = tasks.findIndex(el => el.id === id);
+      let className = tasks[idx].className.indexOf('completed') + 1 ? 'completed' : 'active';
       let newText = text.trim();
 
-      newText = newText.length ? newText : state.tasks[idx].description;
+      newText = newText.length ? newText : tasks[idx].description;
 
-      return updateTasks(state.tasks, idx, 
-        { ...state.tasks[idx], description: newText, className, });
+      return updateTasks(tasks, idx, { ...tasks[idx], description: newText, className, });
     });
   }
 
   onCompleted = id => {
-    this.setState(state => {
-      let idx = getIndex(state.tasks, id);
-      let className = state.tasks[idx].className === 'completed' ? 'active' : 'completed';
+    this.setState(({ tasks }) => {
+      let idx = tasks.findIndex(el => el.id === id);
+      let className = tasks[idx].className === 'completed' ? 'active' : 'completed';
 
-      return updateTasks(state.tasks, idx, { ...state.tasks[idx], className, });
+      return updateTasks(tasks, idx, { ...tasks[idx], className, });
     });
   }
 
   onClickEditButton = id => {
-    this.setState(state => {
-      let idx = getIndex(state.tasks, id);
-      let className = state.tasks[idx].className + '-before-edit editing';
+    this.setState(({ tasks }) => {
+      let idx = tasks.findIndex(el => el.id === id);
+      let className = tasks[idx].className + '-before-edit editing';
 
-      return updateTasks(state.tasks, idx, { ...state.tasks[idx], className, });
+      return updateTasks(tasks, idx, { ...tasks[idx], className, });
     });
   }
 
@@ -64,15 +69,15 @@ export default class App extends Component {
 
     if (!newTaskText.length) return;
 
-    this.setState(state => ({ 
-      tasks: [...state.tasks, this.createNewTask(newTaskText)],
+    this.setState(({ tasks }) => ({ 
+      tasks: [...tasks, this.createNewTask(newTaskText)],
       newTaskInput: '',
     }));
   }
 
   onNewTaskInputChanged = value => this.setState({ newTaskInput: value });
 
-  setFilter = value => this.setState(() => ({ filter: value, }));
+  setFilter = value => this.setState(({ filter: value, }));
 
   render() {
     let { tasks, newTaskInput, filter } = this.state;

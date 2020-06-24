@@ -1,5 +1,3 @@
-export const getIndex = (arr, id) => arr.findIndex(el => el.id === id);
-
 export const updateTasks = (tasks, idx, newTaskProps) => {
     let before = tasks.slice(0, idx);
     let after  = tasks.slice(idx + 1);
