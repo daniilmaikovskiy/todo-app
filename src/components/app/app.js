@@ -33,14 +33,46 @@ export default class App extends Component {
     filter: 'all',
   };
 
-  onDeleted = id => {
+  getIndex = (arr, id) => arr.findIndex(el => el.id === id);
+
+  updateTasks = (tasks, idx, newTaskProps) => {
+    let before = tasks.slice(0, idx);
+    let after  = tasks.slice(idx + 1);
+
+    if (newTaskProps === null) return { tasks: [ ...before, ...after ] };
+
+    let newTask = { ...newTaskProps };
+
+    return { tasks: [ ...before, newTask, ...after ], };
+  }
+
+  onDeleted = id => this.setState(state => 
+    this.updateTasks(state.tasks, this.getIndex(state.tasks, id), null));
+
+  onEdited = (id, text) => {
     this.setState(state => {
-      let index = state.tasks.findIndex(el => id === el.id);
+      let idx = this.getIndex(state.tasks, id);
 
-      let before = state.tasks.slice(0, index);
-      let after  = state.tasks.slice(index + 1);
+      return this.updateTasks(state.tasks, idx, 
+        { ...state.tasks[idx], description: text, className: 'active', });
+    });
+  }
 
-      return { tasks: [ ...before, ...after ] };
+  onCompleted = id => {
+    this.setState(state => {
+      let idx = this.getIndex(state.tasks, id);
+      let className = state.tasks[idx].className === 'completed' ? 'active' : 'completed';
+
+      return this.updateTasks(state.tasks, idx, { ...state.tasks[idx], className, });
+    });
+  }
+
+  onClickEditButton = id => {
+    this.setState(state => {
+      let idx = this.getIndex(state.tasks, id);
+
+      return this.updateTasks(state.tasks, idx, 
+        { ...state.tasks[idx], className: 'editing', });
     });
   }
 
@@ -64,62 +96,7 @@ export default class App extends Component {
     }));
   }
 
-  onNewTaskInputChanged = value => {
-    this.setState({ newTaskInput: value });
-  };
-
-  onEdited = (id, text) => {
-    this.setState(state => {
-      const { tasks } = state;
-
-      let idx = tasks.findIndex(el => el.id === id);
-      let newTask = { ...tasks[idx], description: text, className: 'active', };
-
-      return {
-        tasks: [
-          ...tasks.slice(0, idx),
-          newTask,
-          ...tasks.slice(idx + 1),
-        ],
-      }
-    });
-  }
-
-  onCompleted = id => {
-    this.setState(state => {
-      const { tasks } = state;
-
-      let idx = tasks.findIndex(el => el.id === id);
-      let newClass = tasks[idx].className === 'completed' ? 'active' : 'completed';
-
-      let newTask = { ...tasks[idx], className: newClass, };
-
-      return {
-        tasks: [
-          ...tasks.slice(0, idx),
-          newTask,
-          ...tasks.slice(idx + 1),
-        ],
-      }
-    });
-  }
-
-  onClickEditButton = id => {
-    this.setState(state => {
-      const { tasks } = state;
-
-      let idx = tasks.findIndex(el => el.id === id);
-      let newTask = { ...tasks[idx], className: 'editing', };
-
-      return {
-        tasks: [
-          ...tasks.slice(0, idx),
-          newTask,
-          ...tasks.slice(idx + 1),
-        ],
-      }
-    });
-  }
+  onNewTaskInputChanged = value => this.setState({ newTaskInput: value });
 
   setFilter = value => this.setState(() => ({ filter: value, }));
 
