@@ -32,6 +32,10 @@ export default class App extends Component {
     });
   }
 
+  getCompletedCount = () => 
+    this.state.tasks.reduce((acc, task) => 
+      task.className.indexOf('completed') + 1 ? acc + 1 : acc, 0);
+
   onEdited = (id, text) => {
     this.setState(({ tasks }) => {
       let idx = tasks.findIndex(el => el.id === id);
@@ -95,7 +99,7 @@ export default class App extends Component {
   render() {
     let { tasks, newTaskInput, filter } = this.state;
     let { addNewTask, onNewTaskInputChanged, onDeleted, onEdited, onClickEditButton, 
-      onCompleted, setFilter, clearCompleted } = this;
+      onCompleted, setFilter, clearCompleted, getCompletedCount } = this;
 
     return (
       <section className='todoapp'>
@@ -112,9 +116,10 @@ export default class App extends Component {
               onCompleted={ onCompleted } 
               onClickEditButton={ onClickEditButton } />
             <Footer 
-            setFilter={ setFilter } 
-            filter={ filter }
-            clearCompleted={ clearCompleted }/>
+              setFilter={ setFilter } 
+              filter={ filter }
+              clearCompleted={ clearCompleted }
+              completedCount={ getCompletedCount() }/>
         </section>
       </section>
     );
