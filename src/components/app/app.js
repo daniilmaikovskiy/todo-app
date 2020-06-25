@@ -20,12 +20,12 @@ export default class App extends Component {
 
   clearCompleted = () => {
     this.setState(({ tasks }) => {
-      let idx = tasks.findIndex(el => el.className === 'completed');
+      let idx = tasks.findIndex(el => el.className.indexOf('completed') + 1);
       let currentTasks = [ ...tasks ];
 
       while (idx + 1) {
         currentTasks = updateTasks(currentTasks, idx, null);
-        idx = currentTasks.findIndex(el => el.className === 'completed');
+        idx = currentTasks.findIndex(el => el.className.indexOf('completed') + 1);
       }
 
       return { tasks: currentTasks, };
