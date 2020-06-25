@@ -103,10 +103,13 @@ export default class App extends Component {
 
     return (
       <section className='todoapp'>
-        <NewTaskForm 
-          addNewTask={ addNewTask } 
-          onChange={ onNewTaskInputChanged }  
-          value={ newTaskInput } />
+        <header className="header">
+          <h1>todos</h1>
+          <NewTaskForm 
+            addNewTask={ addNewTask } 
+            onChange={ onNewTaskInputChanged }  
+            value={ newTaskInput } />
+        </header>
         <section className='main'>
             <TodoList 
               tasks={ tasks } 

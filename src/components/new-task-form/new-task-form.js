@@ -21,15 +21,12 @@ export default class NewTaskForm extends Component {
         let { onSubmit, onChange } = this;
 
         return (
-            <header className="header">
-                <h1>todos</h1>
-                <form onSubmit={ onSubmit }>
-                    <input className="new-todo" name="input" 
-                        value={ value } 
-                        onChange={ onChange }
-                        placeholder="What needs to be done?" autoFocus />
-                </form>
-            </header>
+            <form onSubmit={ onSubmit }>
+                <input className="new-todo" name="input" 
+                    value={ value } 
+                    onChange={ onChange }
+                    placeholder="What needs to be done?" autoFocus />
+            </form>
         );
     }
 }
