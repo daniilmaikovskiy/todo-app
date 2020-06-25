@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './tasks-filter.css';
 
 export default class TasksFilter extends Component {
+  static propTypes = {
+    filter:    PropTypes.string.isRequired,
+    setFilter: PropTypes.func.isRequired,
+  }
 
   getClassName = name => this.props.filter === name ? 'selected' : '';
 
