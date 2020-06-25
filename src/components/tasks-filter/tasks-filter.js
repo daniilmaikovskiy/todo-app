@@ -32,7 +32,4 @@ export default class TasksFilter extends Component {
       </ul>
    );
   }
-
-
-    
 }

@@ -4,9 +4,9 @@ import './new-task-form.css';
 
 export default class NewTaskForm extends Component {
     static propTypes = {
-        value: PropTypes.string.isRequired,
+        value:      PropTypes.string.isRequired,
         addNewTask: PropTypes.func.isRequired,
-        onChange: PropTypes.func.isRequired,
+        onChange:   PropTypes.func.isRequired,
     }
 
     onSubmit = e => {
