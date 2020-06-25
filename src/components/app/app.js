@@ -16,13 +16,21 @@ export default class App extends Component {
   };
 
   onDeleted = id => this.setState(({ tasks }) => 
-    updateTasks(tasks, tasks.findIndex(el => el.id === id), null));
+    ({ tasks: updateTasks(tasks, tasks.findIndex(el => el.id === id), null) }));
 
-  // clearCompleted = () => {
-  //   this.setState(state => {
+  clearCompleted = () => {
+    this.setState(({ tasks }) => {
+      let idx = tasks.findIndex(el => el.className === 'completed');
+      let currentTasks = [ ...tasks ];
 
-  //   });
-  // }
+      while (idx + 1) {
+        currentTasks = updateTasks(currentTasks, idx, null);
+        idx = currentTasks.findIndex(el => el.className === 'completed');
+      }
+
+      return { tasks: currentTasks, };
+    });
+  }
 
   onEdited = (id, text) => {
     this.setState(({ tasks }) => {
@@ -32,7 +40,9 @@ export default class App extends Component {
 
       newText = newText.length ? newText : tasks[idx].description;
 
-      return updateTasks(tasks, idx, { ...tasks[idx], description: newText, className, });
+      return { 
+        tasks: updateTasks(tasks, idx, { ...tasks[idx], description: newText, className, })
+      };
     });
   }
 
@@ -41,7 +51,9 @@ export default class App extends Component {
       let idx = tasks.findIndex(el => el.id === id);
       let className = tasks[idx].className === 'completed' ? 'active' : 'completed';
 
-      return updateTasks(tasks, idx, { ...tasks[idx], className, });
+      return { 
+        tasks: updateTasks(tasks, idx, { ...tasks[idx], className, })
+      };
     });
   }
 
@@ -50,7 +62,9 @@ export default class App extends Component {
       let idx = tasks.findIndex(el => el.id === id);
       let className = tasks[idx].className + '-before-edit editing';
 
-      return updateTasks(tasks, idx, { ...tasks[idx], className, });
+      return { 
+        tasks: updateTasks(tasks, idx, { ...tasks[idx], className, })
+      };
     });
   }
 
@@ -81,19 +95,26 @@ export default class App extends Component {
   render() {
     let { tasks, newTaskInput, filter } = this.state;
     let { addNewTask, onNewTaskInputChanged, onDeleted, onEdited, onClickEditButton, 
-      onCompleted, setFilter } = this;
+      onCompleted, setFilter, clearCompleted } = this;
 
     return (
       <section className='todoapp'>
-        <NewTaskForm addNewTask={ addNewTask } 
-          onChange={ onNewTaskInputChanged }  value={ newTaskInput } />
+        <NewTaskForm 
+          addNewTask={ addNewTask } 
+          onChange={ onNewTaskInputChanged }  
+          value={ newTaskInput } />
         <section className='main'>
-            <TodoList tasks={ tasks } filter={ filter }
+            <TodoList 
+              tasks={ tasks } 
+              filter={ filter }
               onDeleted={ onDeleted } 
               onEdited={ onEdited }
               onCompleted={ onCompleted } 
               onClickEditButton={ onClickEditButton } />
-            <Footer setFilter={ setFilter } filter={ filter }/>
+            <Footer 
+            setFilter={ setFilter } 
+            filter={ filter }
+            clearCompleted={ clearCompleted }/>
         </section>
       </section>
     );
