@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './task.css';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import EditInput from '../edit-input';
 
 export default class Task extends Component {
   static propTypes = {
@@ -16,29 +17,9 @@ export default class Task extends Component {
     filter: PropTypes.string.isRequired,
   }
 
-  getEditInput = (className, isCompleted) => {
-    if (className.indexOf('editing') + 1) {
-      let { onEdited, description } = this.props;
-
-      let secondClass = 'edit-' + (isCompleted ? 'completed' : 'active');
-      let editClassName = 'edit ' + secondClass;
-
-      return (
-        <form onSubmit={ e => { e.preventDefault(); onEdited(e.target.input.value) } }>
-          <input type="text" className={ editClassName } 
-            onChange={ e => e.target.value = e.target.value.trimLeft() }
-            defaultValue={ description } name='input' />
-        </form>
-      );
-    }
-
-    return null;
-  }
-
   render() {
-    let { onDeleted, onCompleted, onClickEditButton, 
+    let { onDeleted, onCompleted, onClickEditButton, onEdited,
       className, description, created, filter } = this.props;
-    let { getEditInput } = this;
 
     let isCompleted = className.indexOf('completed') + 1;
     let isHidden = ((filter === 'completed' && !isCompleted) ||
@@ -57,7 +38,11 @@ export default class Task extends Component {
           <button className="icon icon-edit" onClick={ onClickEditButton }></button>
           <button className="icon icon-destroy" onClick={ onDeleted }></button>
         </div>
-        { getEditInput(className, isCompleted) }
+        <EditInput 
+          className={ className } 
+          isCompleted={ !!isCompleted } 
+          description={ description }
+          onEdited={ onEdited } />
       </li>
     );
   }
