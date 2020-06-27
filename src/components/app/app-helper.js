@@ -1,10 +1,8 @@
-export const updateTasks = (tasks, idx, newTaskProps) => {
-    let before = tasks.slice(0, idx);
-    let after  = tasks.slice(idx + 1);
+export const updateTasks = (tasks, idx, newTaskProps = null) => {
+  const before = tasks.slice(0, idx);
+  const after  = tasks.slice(idx + 1);
 
-    if (newTaskProps === null) return [ ...before, ...after ];
+  if (newTaskProps === null) return [...before, ...after];
 
-    let newTask = { ...newTaskProps };
-
-    return [ ...before, newTask, ...after ];
+  return [...before, { ...newTaskProps }, ...after];
 }

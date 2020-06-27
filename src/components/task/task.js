@@ -18,11 +18,11 @@ export default class Task extends Component {
   }
 
   render() {
-    let { onDeleted, onCompleted, onClickEditButton, onEdited,
+    const { onDeleted, onCompleted, onClickEditButton, onEdited,
       className, description, created, filter } = this.props;
 
-    let isCompleted = className.indexOf('completed') + 1;
-    let isHidden = ((filter === 'completed' && !isCompleted) ||
+    const isCompleted = className.indexOf('completed') + 1;
+    const isHidden = ((filter === 'completed' && !isCompleted) ||
                     (filter === 'active' && isCompleted));
       
     return (

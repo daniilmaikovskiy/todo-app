@@ -37,5 +37,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "editorconfig": "^0.15.3"
+  }
 }

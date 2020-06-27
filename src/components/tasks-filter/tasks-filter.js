@@ -13,7 +13,7 @@ export default class TasksFilter extends Component {
   onClick = e => this.props.setFilter(e.target.name);
 
   render() {
-    let { getClassName, onClick } = this;
+    const { getClassName, onClick } = this;
 
     return (
       <ul className="filters">

@@ -16,7 +16,7 @@ export default class App extends Component {
   };
 
   onDeleted = id => this.setState(({ tasks }) => 
-    ({ tasks: updateTasks(tasks, tasks.findIndex(el => el.id === id), null) }));
+    ({ tasks: updateTasks(tasks, tasks.findIndex(el => el.id === id)) }));
 
   clearCompleted = () => {
     this.setState(({ tasks }) => {
@@ -24,7 +24,7 @@ export default class App extends Component {
       let currentTasks = [ ...tasks ];
 
       while (idx + 1) {
-        currentTasks = updateTasks(currentTasks, idx, null);
+        currentTasks = updateTasks(currentTasks, idx);
         idx = currentTasks.findIndex(el => el.className.indexOf('completed') + 1);
       }
 
