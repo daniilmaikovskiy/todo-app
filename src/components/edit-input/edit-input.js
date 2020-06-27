@@ -22,13 +22,10 @@ export default class EditInput extends Component {
     const { onSubmit, onChange } = this;
 
     if (className.indexOf('editing') + 1) {
-      const secondClass = 'edit-' + (isCompleted ? 'completed' : 'active');
-      const editClassName = 'edit ' + secondClass;
-      
       return (
         <form onSubmit={ onSubmit }>
           <input type="text" 
-            className={ editClassName } 
+            className={ 'edit edit-' + (isCompleted ? 'completed' : 'active') } 
             onChange={ onChange }
             defaultValue={ description } 
             name='input' />
