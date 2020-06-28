@@ -6,8 +6,6 @@ import NewTaskForm from "../new-task-form";
 import TodoList from "../todo-list";
 import Footer from "../footer";
 
-let a = 78;
-
 export default class App extends Component {
   maxId = DEFAULT_MAX_ID;
 
