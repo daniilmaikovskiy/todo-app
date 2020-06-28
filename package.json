@@ -99,6 +99,6 @@
     }
   },
   "lint-staged": {
-    "*.js": ["eslint", "prettier --write"]
+    "*.js": ["eslint --fix", "prettier --write"]
   }
 }
