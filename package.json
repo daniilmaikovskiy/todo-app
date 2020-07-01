@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "prettier --write"
+    "prettier": "prettier ./src --write",
+    "lint": "eslint ./src --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -38,9 +39,10 @@
       "jest": true
     },
     "rules": {
+      "quotes": [2, "single", "avoid-escape"],
       "curly": ["error"],
       "max-depth": ["warn", 4],
-      "id-length": ["warn", { "exceptions": ["i", "j"], "min": 2 }],
+      "id-length": ["warn", { "exceptions": ["i", "j", "e"], "min": 2 }],
       "no-lonely-if": ["error"],
       "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
       "no-restricted-syntax": "off",
@@ -50,6 +52,7 @@
       "jsx-a11y/label-has-associated-control": [ "error", {
         "assert": "either"
       }],
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
       "react/state-in-constructor": ["off"],
       "react/jsx-props-no-spreading": ["off"],
       "react/static-property-placement": "off"
@@ -65,7 +68,7 @@
     "singleQuote": true,
     "trailingComma": "es5",
     "endOfLine": "lf",
-    "printWidth": 120
+    "printWidth": 100
   },
   "browserslist": {
     "production": [

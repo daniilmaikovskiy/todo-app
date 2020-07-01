@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import "./app.css";
-import { updateTasks } from "./app-helper";
-import { DEFAULT_TASKS, DEFAULT_MAX_ID } from "./settings";
-import NewTaskForm from "../new-task-form";
-import TodoList from "../todo-list";
-import Footer from "../footer";
+import React from 'react';
+import './app.css';
+import updateTasks from './app-helper';
+import { DEFAULT_TASKS, DEFAULT_MAX_ID } from './settings';
+import NewTaskForm from '../new-task-form';
+import TodoList from '../todo-list';
+import Footer from '../footer';
 
-export default class App extends Component {
+export default class App extends React.Component {
   maxId = DEFAULT_MAX_ID;
 
   state = {
     tasks: DEFAULT_TASKS,
-    newTaskInput: "",
-    filter: "all",
+    newTaskInput: '',
+    filter: 'all',
   };
 
   onDeleted = (id) =>
@@ -25,31 +25,31 @@ export default class App extends Component {
 
   clearCompleted = () => {
     this.setState(({ tasks }) => {
-      let idx = tasks.findIndex((el) => el.className.indexOf("completed") + 1);
+      let idx = tasks.findIndex((el) => el.className.indexOf('completed') + 1);
       let currentTasks = [...tasks];
 
       while (idx + 1) {
         currentTasks = updateTasks(currentTasks, idx);
-        idx = currentTasks.findIndex(
-          (el) => el.className.indexOf("completed") + 1
-        );
+        idx = currentTasks.findIndex((el) => el.className.indexOf('completed') + 1);
       }
 
       return { tasks: currentTasks };
     });
   };
 
-  getCompletedCount = () =>
-    this.state.tasks.reduce(
-      (acc, task) => (task.className.indexOf("completed") + 1 ? acc + 1 : acc),
+  getCompletedCount = () => {
+    const { tasks } = this.state;
+
+    return tasks.reduce(
+      (acc, task) => (task.className.indexOf('completed') + 1 ? acc + 1 : acc),
       0
     );
+  };
 
   onEdited = (id, text) => {
     this.setState(({ tasks }) => {
-      let idx = tasks.findIndex((el) => el.id === id);
-      let className =
-        tasks[idx].className.indexOf("completed") + 1 ? "completed" : "active";
+      const idx = tasks.findIndex((el) => el.id === id);
+      const className = tasks[idx].className.indexOf('completed') + 1 ? 'completed' : 'active';
       let newText = text.trim();
 
       newText = newText.length ? newText : tasks[idx].description;
@@ -66,9 +66,8 @@ export default class App extends Component {
 
   onCompleted = (id) => {
     this.setState(({ tasks }) => {
-      let idx = tasks.findIndex((el) => el.id === id);
-      let className =
-        tasks[idx].className === "completed" ? "active" : "completed";
+      const idx = tasks.findIndex((el) => el.id === id);
+      const className = tasks[idx].className === 'completed' ? 'active' : 'completed';
 
       return {
         tasks: updateTasks(tasks, idx, { ...tasks[idx], className }),
@@ -78,8 +77,8 @@ export default class App extends Component {
 
   onClickEditButton = (id) => {
     this.setState(({ tasks }) => {
-      let idx = tasks.findIndex((el) => el.id === id);
-      let className = tasks[idx].className + "-before-edit editing";
+      const idx = tasks.findIndex((el) => el.id === id);
+      const className = `${tasks[idx].className}-before-edit editing`;
 
       return {
         tasks: updateTasks(tasks, idx, { ...tasks[idx], className }),
@@ -87,23 +86,14 @@ export default class App extends Component {
     });
   };
 
-  createNewTask(text) {
-    return {
-      id: this.maxId++,
-      className: "active",
-      description: text,
-      created: new Date(),
-    };
-  }
-
   addNewTask = (text) => {
-    let newTaskText = text.trim();
+    const newTaskText = text.trim();
 
     if (!newTaskText.length) return;
 
     this.setState(({ tasks }) => ({
       tasks: [...tasks, this.createNewTask(newTaskText)],
-      newTaskInput: "",
+      newTaskInput: '',
     }));
   };
 
@@ -111,9 +101,20 @@ export default class App extends Component {
 
   setFilter = (value) => this.setState({ filter: value });
 
+  createNewTask(text) {
+    const task = {
+      id: (this.maxId += 1),
+      className: 'active',
+      description: text,
+      created: new Date(),
+    };
+
+    return task;
+  }
+
   render() {
-    let { tasks, newTaskInput, filter } = this.state;
-    let {
+    const { tasks, newTaskInput, filter } = this.state;
+    const {
       addNewTask,
       onNewTaskInputChanged,
       onDeleted,
