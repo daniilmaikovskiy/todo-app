@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './task.css';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import EditInput from '../edit-input';
+import IconButton from '../icon-button';
 
 export default function Task({
   onDeleted,
@@ -27,12 +28,8 @@ export default function Task({
           </button>
           <span className="created">{formatDistanceToNow(created, { addSuffix: true })}</span>
         </label>
-        <button type="button" className="icon icon-edit" onClick={onClickEditButton}>
-          ✎
-        </button>
-        <button type="button" className="icon icon-destroy" onClick={onDeleted}>
-          ×
-        </button>
+        <IconButton icon="✎" modifier="edit" onClick={onClickEditButton} />
+        <IconButton icon="×" modifier="destroy" onClick={onDeleted} />
       </div>
       <EditInput
         className={className}
