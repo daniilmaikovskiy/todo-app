@@ -4,60 +4,55 @@ import './task.css';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import EditInput from '../edit-input';
 
-export default class Task extends React.PureComponent {
-  static propTypes = {
-    onDeleted: PropTypes.func.isRequired,
-    onCompleted: PropTypes.func.isRequired,
-    onClickEditButton: PropTypes.func.isRequired,
-    onEdited: PropTypes.func.isRequired,
+export default function Task({
+  onDeleted,
+  onCompleted,
+  onClickEditButton,
+  onEdited,
+  className,
+  description,
+  created,
+  filter,
+}) {
+  const isCompleted = className.indexOf('completed') + 1;
+  const isHidden = (filter === 'completed' && !isCompleted) || (filter === 'active' && isCompleted);
 
-    className: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    created: PropTypes.objectOf(Date).isRequired,
-
-    filter: PropTypes.string.isRequired,
-  };
-
-  render() {
-    const {
-      onDeleted,
-      onCompleted,
-      onClickEditButton,
-      onEdited,
-      className,
-      description,
-      created,
-      filter,
-    } = this.props;
-
-    const isCompleted = className.indexOf('completed') + 1;
-    const isHidden =
-      (filter === 'completed' && !isCompleted) || (filter === 'active' && isCompleted);
-
-    return (
-      <li className={className + (isHidden ? ' hidden' : '')}>
-        <div className="view">
-          <input className="toggle" type="checkbox" />
-          <label>
-            <button type="button" className="description" onClick={onCompleted}>
-              {description}
-            </button>
-            <span className="created">{formatDistanceToNow(created, { addSuffix: true })}</span>
-          </label>
-          <button type="button" className="icon icon-edit" onClick={onClickEditButton}>
-            ✎
+  return (
+    <li className={className + (isHidden ? ' hidden' : '')}>
+      <div className="view">
+        <input className="toggle" type="checkbox" />
+        <label>
+          <button type="button" className="description" onClick={onCompleted}>
+            {description}
           </button>
-          <button type="button" className="icon icon-destroy" onClick={onDeleted}>
-            ×
-          </button>
-        </div>
-        <EditInput
-          className={className}
-          isCompleted={!!isCompleted}
-          description={description}
-          onEdited={onEdited}
-        />
-      </li>
-    );
-  }
+          <span className="created">{formatDistanceToNow(created, { addSuffix: true })}</span>
+        </label>
+        <button type="button" className="icon icon-edit" onClick={onClickEditButton}>
+          ✎
+        </button>
+        <button type="button" className="icon icon-destroy" onClick={onDeleted}>
+          ×
+        </button>
+      </div>
+      <EditInput
+        className={className}
+        isCompleted={!!isCompleted}
+        description={description}
+        onEdited={onEdited}
+      />
+    </li>
+  );
 }
+
+Task.propTypes = {
+  onDeleted: PropTypes.func.isRequired,
+  onCompleted: PropTypes.func.isRequired,
+  onClickEditButton: PropTypes.func.isRequired,
+  onEdited: PropTypes.func.isRequired,
+
+  className: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  created: PropTypes.objectOf(Date).isRequired,
+
+  filter: PropTypes.string.isRequired,
+};
