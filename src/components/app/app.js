@@ -12,6 +12,8 @@ export default class App extends React.Component {
   state = {
     tasks: DEFAULT_TASKS,
     newTaskInput: '',
+    newTaskSeconds: '',
+    newTaskMinutes: '',
     filter: 'all',
   };
 
@@ -86,37 +88,89 @@ export default class App extends React.Component {
     });
   };
 
-  addNewTask = (text) => {
-    const newTaskText = text.trim();
+  addNewTask = () => {
+    const { newTaskInput, newTaskSeconds, newTaskMinutes } = this.state;
 
-    if (!newTaskText.length) return;
+    const text = newTaskInput.trim();
+
+    if (!text.length) return;
 
     this.setState(({ tasks }) => ({
-      tasks: [...tasks, this.createNewTask(newTaskText)],
+      tasks: [...tasks, this.createNewTask(text, newTaskSeconds, newTaskMinutes)],
       newTaskInput: '',
+      newTaskSeconds: '',
+      newTaskMinutes: '',
     }));
   };
 
   onNewTaskInputChanged = (value) => this.setState({ newTaskInput: value });
 
+  onNewTaskSecondsChanged = (value) => this.setState({ newTaskSeconds: value });
+
+  onNewTaskMinutesChanged = (value) => this.setState({ newTaskMinutes: value });
+
   setFilter = (value) => this.setState({ filter: value });
 
-  createNewTask(text) {
+  decreaseTimer = (id, value) => {
+    if (value >= 60 || value <= 0) return;
+
+    this.setState(({ tasks }) => {
+      const idx = tasks.findIndex((el) => el.id === id);
+      const { timer } = tasks[idx];
+
+      let newSec = Number(timer.sec);
+      let newMin = Number(timer.min);
+      let active = true;
+
+      if (timer.sec >= value) {
+        newSec -= value;
+      } else if (timer.min > 0) {
+        newMin -= 1;
+        newSec += 60 - value;
+      } else {
+        newSec = '';
+        newMin = '';
+        active = false;
+      }
+
+      const newTimer = { active, sec: String(newSec), min: String(newMin) };
+
+      return {
+        tasks: updateTasks(tasks, idx, { ...tasks[idx], timer: newTimer }),
+      };
+    });
+  };
+
+  setTimerActive = (id, value) => {
+    this.setState(({ tasks }) => {
+      const idx = tasks.findIndex((el) => el.id === id);
+      const newTimer = { ...tasks[idx].timer, active: value };
+
+      return {
+        tasks: updateTasks(tasks, idx, { ...tasks[idx], timer: newTimer }),
+      };
+    });
+  };
+
+  createNewTask(txt, sec, min) {
     const task = {
       id: (this.maxId += 1),
       className: 'active',
-      description: text,
+      description: txt,
       created: new Date(),
+      timer: { active: true, sec, min },
     };
 
     return task;
   }
 
   render() {
-    const { tasks, newTaskInput, filter } = this.state;
+    const { tasks, newTaskInput, newTaskSeconds, newTaskMinutes, filter } = this.state;
     const {
       addNewTask,
       onNewTaskInputChanged,
+      onNewTaskSecondsChanged,
+      onNewTaskMinutesChanged,
       onDeleted,
       onEdited,
       onClickEditButton,
@@ -124,6 +178,8 @@ export default class App extends React.Component {
       setFilter,
       clearCompleted,
       getCompletedCount,
+      decreaseTimer,
+      setTimerActive,
     } = this;
 
     return (
@@ -132,8 +188,12 @@ export default class App extends React.Component {
           <h1>todos</h1>
           <NewTaskForm
             addNewTask={addNewTask}
-            onChange={onNewTaskInputChanged}
+            onChangeTask={onNewTaskInputChanged}
+            onChangeSeconds={onNewTaskSecondsChanged}
+            onChangeMinutes={onNewTaskMinutesChanged}
             value={newTaskInput}
+            seconds={newTaskSeconds}
+            minutes={newTaskMinutes}
           />
         </header>
         <section className="main">
@@ -144,6 +204,8 @@ export default class App extends React.Component {
             onEdited={onEdited}
             onCompleted={onCompleted}
             onClickEditButton={onClickEditButton}
+            decreaseTimer={decreaseTimer}
+            setTimerActive={setTimerActive}
           />
           <Footer
             setFilter={setFilter}

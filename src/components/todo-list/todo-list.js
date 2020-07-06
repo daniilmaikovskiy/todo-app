@@ -10,6 +10,8 @@ export default function TodoList({
   onEdited,
   onCompleted,
   onClickEditButton,
+  decreaseTimer,
+  setTimerActive,
 }) {
   const taskArr = tasks.map((taskData) => {
     const { id, ...taskProps } = taskData;
@@ -27,6 +29,12 @@ export default function TodoList({
         onClickEditButton={() => {
           onClickEditButton(id);
         }}
+        decreaseTimer={(value) => {
+          decreaseTimer(id, value);
+        }}
+        setTimerActive={(value) => {
+          setTimerActive(id, value);
+        }}
       />
     );
   });
@@ -41,6 +49,11 @@ TodoList.propTypes = {
       className: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       created: PropTypes.objectOf(Date).isRequired,
+      timer: PropTypes.shape({
+        active: PropTypes.bool.isRequired,
+        sec: PropTypes.string.isRequired,
+        min: PropTypes.string.isRequired,
+      }),
     })
   ).isRequired,
 
@@ -49,4 +62,6 @@ TodoList.propTypes = {
   onEdited: PropTypes.func.isRequired,
   onCompleted: PropTypes.func.isRequired,
   onClickEditButton: PropTypes.func.isRequired,
+  decreaseTimer: PropTypes.func.isRequired,
+  setTimerActive: PropTypes.func.isRequired,
 };
