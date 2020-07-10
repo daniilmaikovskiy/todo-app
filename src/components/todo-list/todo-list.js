@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './todo-list.css';
 import Task from '../task';
@@ -13,6 +13,22 @@ export default function TodoList({
   decreaseTimer,
   setTimerActive,
 }) {
+  const [dateNow, setDateNow] = useState(Math.floor(Date.now() / 1000));
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      const newDateNow = Math.floor(Date.now() / 1000);
+
+      if (newDateNow !== dateNow) {
+        setDateNow(newDateNow);
+      }
+    }, 10);
+
+    return () => clearInterval(timerId);
+    // component did mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const taskArr = tasks.map((taskData) => {
     const { id, ...taskProps } = taskData;
 
@@ -35,6 +51,7 @@ export default function TodoList({
         setTimerActive={(value) => {
           setTimerActive(id, value);
         }}
+        dateNow={dateNow}
       />
     );
   });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './task.css';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
@@ -17,27 +17,18 @@ export default function Task({
   timer,
   decreaseTimer,
   setTimerActive,
+  dateNow,
 }) {
-  const [timerId, setTimerId] = useState(null);
-
   useEffect(() => {
-    let id = timerId;
-
-    if (timer.active && (id === null || id)) {
-      id = setTimeout(() => {
-        decreaseTimer();
-        setTimerId(id);
-      }, 1000);
+    if (timer.active) {
+      decreaseTimer();
     }
-
-    return () => clearTimeout(id);
-    // decreaseTimer will be missed to avoid wrong calling the function
-    // that generates an extra timer
+    // decreaseTimer and timer.active will be missed to avoid wrong calling the function
+    // that generates an extra call of decreaseTimer
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timer.active, timerId, className /* , decreaseTimer */]);
+  }, [dateNow]);
 
   const onClick = (value) => {
-    clearTimeout(timerId);
     setTimerActive(value);
   };
 
@@ -113,4 +104,5 @@ Task.propTypes = {
   }).isRequired,
 
   filter: PropTypes.string.isRequired,
+  dateNow: PropTypes.number.isRequired,
 };
