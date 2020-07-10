@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './app.css';
 import updateTasks from './app-helper';
 import { DEFAULT_TASKS, DEFAULT_MAX_ID } from './settings';
@@ -6,117 +6,104 @@ import NewTaskForm from '../new-task-form';
 import TodoList from '../todo-list';
 import Footer from '../footer';
 
-export default class App extends React.Component {
-  maxId = DEFAULT_MAX_ID;
+export default function App() {
+  const [tasks, setTasks] = useState(DEFAULT_TASKS);
+  const [maxId, setMaxId] = useState(DEFAULT_MAX_ID);
+  const [newTaskInput, setNewTaskInput] = useState('');
+  const [newTaskSeconds, setNewTaskSeconds] = useState('');
+  const [newTaskMinutes, setNewTaskMinutes] = useState('');
+  const [filter, setFilter] = useState('all');
 
-  state = {
-    tasks: DEFAULT_TASKS,
-    newTaskInput: '',
-    newTaskSeconds: '',
-    newTaskMinutes: '',
-    filter: 'all',
+  const createNewTask = (txt, sec, min) => {
+    const task = {
+      id: maxId,
+      className: 'active',
+      description: txt,
+      created: new Date(),
+      timer: { active: true, sec, min },
+    };
+
+    setMaxId((state) => state + 1);
+
+    return task;
   };
 
-  onDeleted = (id) =>
-    this.setState(({ tasks }) => ({
-      tasks: updateTasks(
+  const onDeleted = (id) =>
+    setTasks(
+      updateTasks(
         tasks,
         tasks.findIndex((el) => el.id === id)
-      ),
-    }));
+      )
+    );
 
-  clearCompleted = () => {
-    this.setState(({ tasks }) => {
-      let idx = tasks.findIndex((el) => el.className.indexOf('completed') + 1);
-      let currentTasks = [...tasks];
+  const clearCompleted = () => {
+    setTasks((state) => {
+      let idx = state.findIndex((el) => el.className.indexOf('completed') + 1);
+      let currentTasks = [...state];
 
       while (idx + 1) {
         currentTasks = updateTasks(currentTasks, idx);
         idx = currentTasks.findIndex((el) => el.className.indexOf('completed') + 1);
       }
 
-      return { tasks: currentTasks };
+      return currentTasks;
     });
   };
 
-  getCompletedCount = () => {
-    const { tasks } = this.state;
-
+  const getCompletedCount = () => {
     return tasks.reduce(
       (acc, task) => (task.className.indexOf('completed') + 1 ? acc + 1 : acc),
       0
     );
   };
 
-  onEdited = (id, text) => {
-    this.setState(({ tasks }) => {
-      const idx = tasks.findIndex((el) => el.id === id);
-      const className = tasks[idx].className.indexOf('completed') + 1 ? 'completed' : 'active';
+  const onEdited = (id, text) => {
+    setTasks((state) => {
+      const idx = state.findIndex((el) => el.id === id);
+      const className = state[idx].className.indexOf('completed') + 1 ? 'completed' : 'active';
       let newText = text.trim();
 
-      newText = newText.length ? newText : tasks[idx].description;
+      newText = newText.length ? newText : state[idx].description;
 
-      return {
-        tasks: updateTasks(tasks, idx, {
-          ...tasks[idx],
-          description: newText,
-          className,
-        }),
-      };
+      return updateTasks(state, idx, { ...state[idx], description: newText, className });
     });
   };
 
-  onCompleted = (id) => {
-    this.setState(({ tasks }) => {
-      const idx = tasks.findIndex((el) => el.id === id);
-      const className = tasks[idx].className === 'completed' ? 'active' : 'completed';
+  const onCompleted = (id) => {
+    setTasks((state) => {
+      const idx = state.findIndex((el) => el.id === id);
+      const className = state[idx].className === 'completed' ? 'active' : 'completed';
 
-      return {
-        tasks: updateTasks(tasks, idx, { ...tasks[idx], className }),
-      };
+      return updateTasks(state, idx, { ...state[idx], className });
     });
   };
 
-  onClickEditButton = (id) => {
-    this.setState(({ tasks }) => {
-      const idx = tasks.findIndex((el) => el.id === id);
-      const className = `${tasks[idx].className}-before-edit editing`;
+  const onClickEditButton = (id) => {
+    setTasks((state) => {
+      const idx = state.findIndex((el) => el.id === id);
+      const className = `${state[idx].className}-before-edit editing`;
 
-      return {
-        tasks: updateTasks(tasks, idx, { ...tasks[idx], className }),
-      };
+      return updateTasks(state, idx, { ...state[idx], className });
     });
   };
 
-  addNewTask = () => {
-    const { newTaskInput, newTaskSeconds, newTaskMinutes } = this.state;
-
+  const addNewTask = () => {
     const text = newTaskInput.trim();
 
     if (!text.length) return;
 
-    this.setState(({ tasks }) => ({
-      tasks: [...tasks, this.createNewTask(text, newTaskSeconds, newTaskMinutes)],
-      newTaskInput: '',
-      newTaskSeconds: '',
-      newTaskMinutes: '',
-    }));
+    setNewTaskInput('');
+    setNewTaskSeconds('');
+    setNewTaskMinutes('');
+    setTasks((state) => [...state, createNewTask(text, newTaskSeconds, newTaskMinutes)]);
   };
 
-  onNewTaskInputChanged = (value) => this.setState({ newTaskInput: value });
-
-  onNewTaskSecondsChanged = (value) => this.setState({ newTaskSeconds: value });
-
-  onNewTaskMinutesChanged = (value) => this.setState({ newTaskMinutes: value });
-
-  setFilter = (value) => this.setState({ filter: value });
-
-  decreaseTimer = (id, value) => {
+  const decreaseTimer = (id, value) => {
     if (value >= 60 || value <= 0) return;
 
-    this.setState(({ tasks }) => {
-      const idx = tasks.findIndex((el) => el.id === id);
-      const { timer } = tasks[idx];
+    setTasks((state) => {
+      const idx = state.findIndex((el) => el.id === id);
+      const { timer } = state[idx];
 
       let newSec = Number(timer.sec);
       let newMin = Number(timer.min);
@@ -135,86 +122,51 @@ export default class App extends React.Component {
 
       const newTimer = { active, sec: String(newSec), min: String(newMin) };
 
-      return {
-        tasks: updateTasks(tasks, idx, { ...tasks[idx], timer: newTimer }),
-      };
+      return updateTasks(state, idx, { ...state[idx], timer: newTimer });
     });
   };
 
-  setTimerActive = (id, value) => {
-    this.setState(({ tasks }) => {
-      const idx = tasks.findIndex((el) => el.id === id);
-      const newTimer = { ...tasks[idx].timer, active: value };
+  const setTimerActive = (id, value) => {
+    setTasks((state) => {
+      const idx = state.findIndex((el) => el.id === id);
+      const newTimer = { ...state[idx].timer, active: value };
 
-      return {
-        tasks: updateTasks(tasks, idx, { ...tasks[idx], timer: newTimer }),
-      };
+      return updateTasks(state, idx, { ...state[idx], timer: newTimer });
     });
   };
 
-  createNewTask(txt, sec, min) {
-    const task = {
-      id: (this.maxId += 1),
-      className: 'active',
-      description: txt,
-      created: new Date(),
-      timer: { active: true, sec, min },
-    };
-
-    return task;
-  }
-
-  render() {
-    const { tasks, newTaskInput, newTaskSeconds, newTaskMinutes, filter } = this.state;
-    const {
-      addNewTask,
-      onNewTaskInputChanged,
-      onNewTaskSecondsChanged,
-      onNewTaskMinutesChanged,
-      onDeleted,
-      onEdited,
-      onClickEditButton,
-      onCompleted,
-      setFilter,
-      clearCompleted,
-      getCompletedCount,
-      decreaseTimer,
-      setTimerActive,
-    } = this;
-
-    return (
-      <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <NewTaskForm
-            addNewTask={addNewTask}
-            onChangeTask={onNewTaskInputChanged}
-            onChangeSeconds={onNewTaskSecondsChanged}
-            onChangeMinutes={onNewTaskMinutesChanged}
-            value={newTaskInput}
-            seconds={newTaskSeconds}
-            minutes={newTaskMinutes}
-          />
-        </header>
-        <section className="main">
-          <TodoList
-            tasks={tasks}
-            filter={filter}
-            onDeleted={onDeleted}
-            onEdited={onEdited}
-            onCompleted={onCompleted}
-            onClickEditButton={onClickEditButton}
-            decreaseTimer={decreaseTimer}
-            setTimerActive={setTimerActive}
-          />
-          <Footer
-            setFilter={setFilter}
-            filter={filter}
-            clearCompleted={clearCompleted}
-            completedCount={getCompletedCount()}
-          />
-        </section>
+  return (
+    <section className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
+        <NewTaskForm
+          addNewTask={addNewTask}
+          onChangeTask={setNewTaskInput}
+          onChangeSeconds={setNewTaskSeconds}
+          onChangeMinutes={setNewTaskMinutes}
+          value={newTaskInput}
+          seconds={newTaskSeconds}
+          minutes={newTaskMinutes}
+        />
+      </header>
+      <section className="main">
+        <TodoList
+          tasks={tasks}
+          filter={filter}
+          onDeleted={onDeleted}
+          onEdited={onEdited}
+          onCompleted={onCompleted}
+          onClickEditButton={onClickEditButton}
+          decreaseTimer={decreaseTimer}
+          setTimerActive={setTimerActive}
+        />
+        <Footer
+          setFilter={setFilter}
+          filter={filter}
+          clearCompleted={clearCompleted}
+          completedCount={getCompletedCount()}
+        />
       </section>
-    );
-  }
+    </section>
+  );
 }
