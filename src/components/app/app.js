@@ -98,7 +98,7 @@ export default function App() {
     setTasks((state) => [...state, createNewTask(text, newTaskSeconds, newTaskMinutes)]);
   };
 
-  const decreaseTimer = (id, value) => {
+  const decreaseTimer = (id, value = 1) => {
     if (value >= 60 || value <= 0) return;
 
     setTasks((state) => {
